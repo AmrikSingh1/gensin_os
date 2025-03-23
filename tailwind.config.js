@@ -35,5 +35,22 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require('daisyui')],
+  daisyui: {
+    themes: [
+      {
+        cyberpunk: {
+          primary: '#0ff4f4',
+          secondary: '#ff2a6d',
+          accent: '#f9f871',
+          neutral: '#12141f',
+          'base-100': '#0a0a0f',
+          info: '#0ff4f4',
+          success: '#36d399',
+          warning: '#f9f871',
+          error: '#ff3366',
+        },
+      },
+    ],
+  },
 } 
