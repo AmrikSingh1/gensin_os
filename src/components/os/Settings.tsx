@@ -1,24 +1,44 @@
 'use client'
 
 import React from 'react'
-import { useOsStore } from '@/context/OsContext'
+import { useOsStore } from '@/store/osStore'
 import { FaDesktop, FaVolumeUp, FaBell, FaPalette, FaUser, FaLock, FaWifi, FaLanguage } from 'react-icons/fa'
 
 export default function Settings({ windowId }: { windowId: string }) {
-  const { systemSettings, updateSettings, darkMode, toggleDarkMode } = useOsStore()
+  const { 
+    wallpaper, 
+    setWallpaper, 
+    animatedWallpaper, 
+    setAnimatedWallpaper, 
+    animatedWallpaperOpacity, 
+    setAnimatedWallpaperOpacity, 
+    theme, 
+    setTheme 
+  } = useOsStore()
   
   const themeOptions = [
-    { value: 'blue', label: 'Neon Blue' },
-    { value: 'pink', label: 'Cyber Pink' },
-    { value: 'green', label: 'Matrix Green' },
-    { value: 'purple', label: 'Retrowave Purple' },
+    { value: 'default', label: 'Default Cyberpunk' },
+    { value: 'neon', label: 'Neon Glow' },
+    { value: 'cybernight', label: 'Cyber Night' },
+    { value: 'ghostinwire', label: 'Ghost in the Wire' },
+    { value: 'retrowave', label: 'Retrowave' },
   ]
   
   const wallpaperOptions = [
-    { value: 'cyberpunk-city.jpg', label: 'Cyberpunk City' },
-    { value: 'neon-grid.jpg', label: 'Neon Grid' },
-    { value: 'digital-landscape.jpg', label: 'Digital Landscape' },
-    { value: 'hacker-terminal.jpg', label: 'Hacker Terminal' },
+    { value: '/wallpapers/default.jpg', label: 'Default' },
+    { value: '/wallpapers/cyberpunk-city.jpg', label: 'Cyberpunk City' },
+    { value: '/wallpapers/neon-grid.jpg', label: 'Neon Grid' },
+    { value: '/wallpapers/digital-landscape.jpg', label: 'Digital Landscape' },
+    { value: '/wallpapers/hacker-terminal.jpg', label: 'Hacker Terminal' },
+    { value: '/wallpapers/cyberpunk1.jpg', label: 'Cyberpunk Cityscape' },
+  ]
+  
+  const animatedWallpaperOptions = [
+    { value: 'none', label: 'None' },
+    { value: 'matrix', label: 'Matrix Code' },
+    { value: 'digital-rain', label: 'Digital Rain' },
+    { value: 'particles', label: 'Particle Network' },
+    { value: 'cybercity', label: 'Cyber City Skyline' },
   ]
   
   return (
@@ -52,21 +72,22 @@ export default function Settings({ windowId }: { windowId: string }) {
           </ul>
         </div>
         
-        <div className="flex-1 bg-cyber-black/20 p-6 rounded-r-md">
+        <div className="flex-1 bg-cyber-black/20 p-6 rounded-r-md overflow-y-auto">
           <h3 className="text-lg font-cyber text-cyber-blue mb-6 flex items-center">
             <FaPalette className="mr-2" /> 
             Appearance Settings
           </h3>
           
           <div className="space-y-6">
+            {/* Theme Settings */}
             <div>
               <label className="block text-cyber-blue/80 font-mono text-sm mb-2">
                 COLOR THEME
               </label>
               <select 
                 className="os-input w-full bg-cyber-black"
-                value={systemSettings.theme}
-                onChange={(e) => updateSettings({ theme: e.target.value as any })}
+                value={theme}
+                onChange={(e) => setTheme(e.target.value as any)}
               >
                 {themeOptions.map(option => (
                   <option key={option.value} value={option.value}>
@@ -76,14 +97,15 @@ export default function Settings({ windowId }: { windowId: string }) {
               </select>
             </div>
             
+            {/* Wallpaper Settings */}
             <div>
               <label className="block text-cyber-blue/80 font-mono text-sm mb-2">
-                WALLPAPER
+                STATIC WALLPAPER
               </label>
               <select 
                 className="os-input w-full bg-cyber-black"
-                value={systemSettings.wallpaper}
-                onChange={(e) => updateSettings({ wallpaper: e.target.value })}
+                value={wallpaper}
+                onChange={(e) => setWallpaper(e.target.value)}
               >
                 {wallpaperOptions.map(option => (
                   <option key={option.value} value={option.value}>
@@ -91,42 +113,81 @@ export default function Settings({ windowId }: { windowId: string }) {
                   </option>
                 ))}
               </select>
+              
+              <div className="mt-3 grid grid-cols-3 gap-2">
+                {wallpaperOptions.map(option => (
+                  <div 
+                    key={option.value}
+                    className={`aspect-video cursor-pointer rounded-md overflow-hidden border-2 ${
+                      wallpaper === option.value ? 'border-cyber-blue' : 'border-transparent'
+                    }`}
+                    onClick={() => setWallpaper(option.value)}
+                  >
+                    <img 
+                      src={option.value} 
+                      alt={option.label}
+                      className="w-full h-full object-cover" 
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
             
-            <div className="flex items-center">
-              <label className="flex items-center cursor-pointer">
-                <div className="relative">
-                  <input
-                    type="checkbox"
-                    className="sr-only"
-                    checked={systemSettings.soundEnabled}
-                    onChange={() => updateSettings({ soundEnabled: !systemSettings.soundEnabled })}
-                  />
-                  <div className={`block w-14 h-8 rounded-full ${systemSettings.soundEnabled ? 'bg-cyber-blue' : 'bg-cyber-gray'}`}></div>
-                  <div className={`absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition ${systemSettings.soundEnabled ? 'transform translate-x-full bg-cyber-black' : 'bg-cyber-dark'}`}></div>
-                </div>
-                <div className="ml-3 text-cyber-blue/80 font-mono text-sm">
-                  SYSTEM SOUNDS
-                </div>
+            {/* Animated Wallpaper Settings */}
+            <div>
+              <label className="block text-cyber-blue/80 font-mono text-sm mb-2">
+                ANIMATED WALLPAPER OVERLAY
               </label>
+              <select 
+                className="os-input w-full bg-cyber-black"
+                value={animatedWallpaper}
+                onChange={(e) => setAnimatedWallpaper(e.target.value as any)}
+              >
+                {animatedWallpaperOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
             </div>
             
-            <div className="flex items-center">
-              <label className="flex items-center cursor-pointer">
-                <div className="relative">
-                  <input
-                    type="checkbox"
-                    className="sr-only"
-                    checked={systemSettings.notifications}
-                    onChange={() => updateSettings({ notifications: !systemSettings.notifications })}
-                  />
-                  <div className={`block w-14 h-8 rounded-full ${systemSettings.notifications ? 'bg-cyber-blue' : 'bg-cyber-gray'}`}></div>
-                  <div className={`absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition ${systemSettings.notifications ? 'transform translate-x-full bg-cyber-black' : 'bg-cyber-dark'}`}></div>
-                </div>
-                <div className="ml-3 text-cyber-blue/80 font-mono text-sm">
-                  NOTIFICATIONS
-                </div>
+            {/* Opacity slider for animated wallpaper */}
+            {animatedWallpaper !== 'none' && (
+              <div>
+                <label className="block text-cyber-blue/80 font-mono text-sm mb-2">
+                  ANIMATION OPACITY: {Math.round(animatedWallpaperOpacity * 100)}%
+                </label>
+                <input 
+                  type="range" 
+                  min="0.1" 
+                  max="1" 
+                  step="0.05"
+                  value={animatedWallpaperOpacity}
+                  onChange={(e) => setAnimatedWallpaperOpacity(parseFloat(e.target.value))}
+                  className="w-full h-2 bg-cyber-black rounded-lg appearance-none cursor-pointer"
+                />
+              </div>
+            )}
+            
+            {/* Preview section */}
+            <div className="mt-4">
+              <label className="block text-cyber-blue/80 font-mono text-sm mb-2">
+                PREVIEW
               </label>
+              <div className="w-full h-40 rounded-md overflow-hidden relative">
+                <img 
+                  src={wallpaper} 
+                  alt="Current wallpaper"
+                  className="w-full h-full object-cover" 
+                />
+                {animatedWallpaper !== 'none' && (
+                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                    <span className="text-cyber-blue animate-pulse">
+                      {animatedWallpaperOptions.find(o => o.value === animatedWallpaper)?.label} Animation Active
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

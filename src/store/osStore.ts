@@ -15,6 +15,9 @@ export type AppType =
 // Define theme types
 export type ThemeType = 'default' | 'neon' | 'cybernight' | 'ghostinwire' | 'retrowave';
 
+// Define animated wallpaper types
+export type AnimatedWallpaperType = 'none' | 'matrix' | 'particles' | 'cybercity' | 'digital-rain';
+
 // Define notification types
 export type NotificationType = 'info' | 'success' | 'warning' | 'error';
 
@@ -54,6 +57,8 @@ interface OsState {
   isStartMenuOpen: boolean;
   highestZIndex: number;
   wallpaper: string;
+  animatedWallpaper: AnimatedWallpaperType;
+  animatedWallpaperOpacity: number;
   theme: ThemeType;
   notifications: Notification[];
   isMuted: boolean;
@@ -75,6 +80,8 @@ interface OsState {
   resizeWindow: (id: string, size: { width: number; height: number }) => void;
   toggleStartMenu: () => void;
   setWallpaper: (wallpaper: string) => void;
+  setAnimatedWallpaper: (type: AnimatedWallpaperType) => void;
+  setAnimatedWallpaperOpacity: (opacity: number) => void;
   setTheme: (theme: ThemeType) => void;
   addNotification: (notification: Omit<Notification, 'id' | 'timestamp' | 'isRead'>) => void;
   markNotificationAsRead: (id: string) => void;
@@ -97,6 +104,8 @@ export const useOsStore = create<OsState>()(
       isStartMenuOpen: false,
       highestZIndex: 10,
       wallpaper: '/wallpapers/default.jpg',
+      animatedWallpaper: 'none',
+      animatedWallpaperOpacity: 0.7,
       theme: 'default',
       notifications: [],
       isMuted: false,
@@ -374,6 +383,24 @@ export const useOsStore = create<OsState>()(
         });
       },
       
+      // Set animated wallpaper
+      setAnimatedWallpaper: (type) => {
+        set({ animatedWallpaper: type });
+        get().addNotification({
+          type: 'success',
+          title: 'Animated Wallpaper Changed',
+          message: type === 'none' 
+            ? 'Animated wallpaper has been disabled.'
+            : `The ${type} animated wallpaper has been applied.`,
+          autoClose: true
+        });
+      },
+      
+      // Set animated wallpaper opacity
+      setAnimatedWallpaperOpacity: (opacity) => {
+        set({ animatedWallpaperOpacity: opacity });
+      },
+      
       // Set theme
       setTheme: (theme) => {
         set({ theme });
@@ -463,6 +490,8 @@ export const useOsStore = create<OsState>()(
       partialize: (state) => ({
         theme: state.theme,
         wallpaper: state.wallpaper,
+        animatedWallpaper: state.animatedWallpaper,
+        animatedWallpaperOpacity: state.animatedWallpaperOpacity,
         username: state.username,
       }),
     }

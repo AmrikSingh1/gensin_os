@@ -3,6 +3,7 @@
 import React from 'react'
 import { useOsStore } from '@/store/osStore'
 import DesktopIcon from './DesktopIcon'
+import AnimatedWallpaper from './AnimatedWallpaper'
 import { FaFolder, FaTerminal, FaCog, FaGlobe, FaEdit, FaMusic, FaImage, FaCalculator } from 'react-icons/fa'
 
 // Define desktop app structure
@@ -37,7 +38,7 @@ const iconMap: Record<string, React.ReactNode> = {
 }
 
 export default function Desktop() {
-  const { wallpaper, openApp } = useOsStore()
+  const { wallpaper, animatedWallpaper, animatedWallpaperOpacity, openApp } = useOsStore()
   
   const handleOpenApp = (app: DesktopApp) => {
     openApp(app.type as any);
@@ -52,6 +53,14 @@ export default function Desktop() {
         backgroundPosition: 'center',
       }}
     >
+      {/* Animated wallpaper overlay */}
+      {animatedWallpaper !== 'none' && (
+        <AnimatedWallpaper 
+          type={animatedWallpaper} 
+          opacity={animatedWallpaperOpacity} 
+        />
+      )}
+      
       <div className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
         {desktopApps.map((app) => (
           <DesktopIcon 
