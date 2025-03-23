@@ -15,8 +15,16 @@
     "os",
     "virtual operating system"
   ],
-  "author": "",
-  "license": "ISC",
+  "author": "Amrik Singh",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AmrikSingh1/gensin_os.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AmrikSingh1/gensin_os/issues"
+  },
+  "homepage": "https://github.com/AmrikSingh1/gensin_os#readme",
   "dependencies": {
     "@neodrag/react": "^2.3.0",
     "@radix-ui/react-dialog": "^1.0.5",
