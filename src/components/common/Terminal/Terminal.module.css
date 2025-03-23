@@ -1,0 +1,252 @@
+.terminal {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.3), 0 0 20px rgba(255, 0, 255, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.terminal:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.4;
+}
+
+.fullScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  border-radius: 0;
+}
+
+.terminalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+.terminalControls {
+  display: flex;
+  gap: 8px;
+}
+
+.terminalControl {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.terminalControl:nth-child(1) {
+  background-color: #ff5f56;
+}
+
+.terminalControl:nth-child(2) {
+  background-color: #ffbd2e;
+}
+
+.terminalControl:nth-child(3) {
+  background-color: #27c93f;
+}
+
+.terminalControl:hover {
+  filter: brightness(1.2);
+}
+
+.terminalTitle {
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.terminalContent {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 255, 255, 0.4) rgba(0, 0, 0, 0.2);
+}
+
+.terminalContent::-webkit-scrollbar {
+  width: 6px;
+}
+
+.terminalContent::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.terminalContent::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 255, 255, 0.4);
+  border-radius: 6px;
+}
+
+.terminalLine {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin-bottom: 4px;
+}
+
+.terminalLine:last-child {
+  margin-bottom: 0;
+}
+
+.command {
+  color: cyan;
+}
+
+.error {
+  color: #ff3e3e;
+}
+
+.terminalInputLine {
+  display: flex;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: 1.4;
+  white-space: pre;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.terminalInput {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.cursor {
+  display: inline-block;
+  color: inherit;
+  background-color: transparent;
+  position: relative;
+}
+
+.cursorVisible {
+  background-color: #00FF41;
+  color: #0D0221;
+}
+
+/* Syntax highlighting styles */
+.terminal :global(.dir) {
+  color: #00AAFF;
+  font-weight: bold;
+}
+
+.terminal :global(.file) {
+  color: #FFFFFF;
+}
+
+.terminal :global(.executable) {
+  color: #00FF41;
+  font-weight: bold;
+}
+
+.terminal :global(.match) {
+  background-color: rgba(255, 255, 0, 0.3);
+  color: #FFFFFF;
+}
+
+.terminal :global(.error) {
+  color: #FF3E3E;
+}
+
+.terminal :global(.warning) {
+  color: #FFAA00;
+}
+
+.terminal :global(.success) {
+  color: #00FF41;
+}
+
+.terminal :global(.info) {
+  color: #00AAFF;
+}
+
+.terminal :global(.encrypted) {
+  color: #FF00FF;
+  font-style: italic;
+}
+
+.terminal :global(.highlight) {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+.terminal :global(.prompt) {
+  color: #FF00FF;
+}
+
+.terminal :global(.path) {
+  color: #FFAA00;
+}
+
+.terminal :global(.user) {
+  color: #00AAFF;
+}
+
+.terminal :global(.hostname) {
+  color: #00FF41;
+}
+
+.terminal :global(.timestamp) {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8em;
+}
+
+/* Matrix mode effect */
+.terminal :global(.matrix-char) {
+  animation: matrixFade 2s infinite;
+  animation-delay: calc(var(--char-index) * 0.1s);
+}
+
+@keyframes matrixFade {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* CRT effects */
+.terminal:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.5;
+} 

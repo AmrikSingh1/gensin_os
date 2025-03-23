@@ -7,7 +7,7 @@ interface AnimatedWallpaperProps {
   opacity?: number;
 }
 
-export const AnimatedWallpaper: React.FC<AnimatedWallpaperProps> = ({ 
+const AnimatedWallpaper: React.FC<AnimatedWallpaperProps> = ({ 
   type, 
   opacity = 0.8 
 }) => {
@@ -19,26 +19,29 @@ export const AnimatedWallpaper: React.FC<AnimatedWallpaperProps> = ({
   // Set up canvas dimensions and update on resize
   useEffect(() => {
     const updateDimensions = () => {
-      if (canvasRef.current) {
+      if (canvasRef.current && typeof window !== 'undefined') {
         const { clientWidth, clientHeight } = document.documentElement;
         setDimensions({ width: clientWidth, height: clientHeight });
       }
     };
     
-    updateDimensions();
-    window.addEventListener('resize', updateDimensions);
-    
-    return () => {
-      window.removeEventListener('resize', updateDimensions);
-      if (requestRef.current) {
-        cancelAnimationFrame(requestRef.current);
-      }
-    };
+    // Ensure this only runs in the browser
+    if (typeof window !== 'undefined') {
+      updateDimensions();
+      window.addEventListener('resize', updateDimensions);
+      
+      return () => {
+        window.removeEventListener('resize', updateDimensions);
+        if (requestRef.current) {
+          cancelAnimationFrame(requestRef.current);
+        }
+      };
+    }
   }, []);
   
   // Matrix/Digital Rain effect
   useEffect(() => {
-    if (type === 'matrix' || type === 'digital-rain') {
+    if ((type === 'matrix' || type === 'digital-rain') && typeof window !== 'undefined') {
       if (!canvasRef.current || dimensions.width === 0) return;
       
       const canvas = canvasRef.current;
@@ -100,7 +103,7 @@ export const AnimatedWallpaper: React.FC<AnimatedWallpaperProps> = ({
   
   // Particles effect
   useEffect(() => {
-    if (type === 'particles') {
+    if (type === 'particles' && typeof window !== 'undefined') {
       if (!canvasRef.current || dimensions.width === 0) return;
       
       const canvas = canvasRef.current;
@@ -188,7 +191,7 @@ export const AnimatedWallpaper: React.FC<AnimatedWallpaperProps> = ({
   
   // CyberCity effect
   useEffect(() => {
-    if (type === 'cybercity') {
+    if (type === 'cybercity' && typeof window !== 'undefined') {
       if (!canvasRef.current || dimensions.width === 0) return;
       
       const canvas = canvasRef.current;

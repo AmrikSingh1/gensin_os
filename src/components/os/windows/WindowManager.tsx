@@ -6,6 +6,7 @@ import { useOsStore } from '@/store/osStore'
 import Window from './Window'
 import FileExplorer from '../apps/FileExplorer'
 import Terminal from '../apps/Terminal'
+import EnhancedTerminal from '../apps/EnhancedTerminal'
 import TextEditor from '../apps/TextEditor'
 import Browser from '../apps/Browser'
 import Settings from '../apps/Settings'
@@ -17,6 +18,7 @@ import Calculator from '../apps/Calculator'
 const componentMap: Record<string, React.ComponentType<any>> = {
   FileExplorer,
   Terminal,
+  EnhancedTerminal,
   TextEditor,
   Browser,
   Settings,
@@ -25,16 +27,17 @@ const componentMap: Record<string, React.ComponentType<any>> = {
   Calculator,
 }
 
-// Map for app types to icon names
+// Map for app types to icon paths
 const iconMap: Record<string, string> = {
-  FileExplorer: 'folder',
-  Terminal: 'terminal',
-  TextEditor: 'edit',
-  Browser: 'globe',
-  Settings: 'settings',
-  MusicPlayer: 'music',
-  ImageViewer: 'image',
-  Calculator: 'calculator',
+  FileExplorer: '/icons/folder.svg',
+  Terminal: '/icons/terminal.svg',
+  EnhancedTerminal: '/icons/terminal-alt.svg',
+  TextEditor: '/icons/edit.svg',
+  Browser: '/icons/globe.svg',
+  Settings: '/icons/settings.svg',
+  MusicPlayer: '/icons/music.svg',
+  ImageViewer: '/icons/image.svg',
+  Calculator: '/icons/calculator.svg',
 };
 
 export default function WindowManager() {
@@ -69,12 +72,14 @@ export default function WindowManager() {
       <AnimatePresence>
         {windows.filter(window => !window.isMinimized).map((window) => {
           const AppComponent = componentMap[window.type]
+          const iconPath = iconMap[window.type] || '/icons/app-default.svg'
           
           return (
             <Window
               key={window.id}
               id={window.id}
               title={window.title}
+              icon={iconPath}
               position={window.position}
               size={window.size}
               isActive={window.isActive}

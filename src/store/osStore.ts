@@ -59,6 +59,9 @@ interface OsState {
   wallpaper: string;
   animatedWallpaper: AnimatedWallpaperType;
   animatedWallpaperOpacity: number;
+  videoWallpaper: boolean;
+  videoWallpaperSrc: string;
+  videoWallpaperOpacity: number;
   theme: ThemeType;
   notifications: Notification[];
   isMuted: boolean;
@@ -82,6 +85,9 @@ interface OsState {
   setWallpaper: (wallpaper: string) => void;
   setAnimatedWallpaper: (type: AnimatedWallpaperType) => void;
   setAnimatedWallpaperOpacity: (opacity: number) => void;
+  toggleVideoWallpaper: (enabled: boolean) => void;
+  setVideoWallpaperSrc: (src: string) => void;
+  setVideoWallpaperOpacity: (opacity: number) => void;
   setTheme: (theme: ThemeType) => void;
   addNotification: (notification: Omit<Notification, 'id' | 'timestamp' | 'isRead'>) => void;
   markNotificationAsRead: (id: string) => void;
@@ -106,6 +112,9 @@ export const useOsStore = create<OsState>()(
       wallpaper: '/wallpapers/default.jpg',
       animatedWallpaper: 'none',
       animatedWallpaperOpacity: 0.7,
+      videoWallpaper: false,
+      videoWallpaperSrc: '/assets/animatedwallpaper.mp4',
+      videoWallpaperOpacity: 0.9,
       theme: 'default',
       notifications: [],
       isMuted: false,
@@ -385,7 +394,11 @@ export const useOsStore = create<OsState>()(
       
       // Set animated wallpaper
       setAnimatedWallpaper: (type) => {
-        set({ animatedWallpaper: type });
+        set({ 
+          animatedWallpaper: type,
+          // Disable video wallpaper if animated wallpaper is enabled
+          videoWallpaper: type !== 'none' ? false : get().videoWallpaper
+        });
         get().addNotification({
           type: 'success',
           title: 'Animated Wallpaper Changed',
@@ -399,6 +412,33 @@ export const useOsStore = create<OsState>()(
       // Set animated wallpaper opacity
       setAnimatedWallpaperOpacity: (opacity) => {
         set({ animatedWallpaperOpacity: opacity });
+      },
+      
+      // Toggle video wallpaper
+      toggleVideoWallpaper: (enabled) => {
+        set({ 
+          videoWallpaper: enabled,
+          // Disable animated wallpaper if video wallpaper is enabled
+          animatedWallpaper: enabled ? 'none' : get().animatedWallpaper
+        });
+        get().addNotification({
+          type: 'success',
+          title: 'Video Wallpaper',
+          message: enabled 
+            ? 'Video wallpaper has been enabled.' 
+            : 'Video wallpaper has been disabled.',
+          autoClose: true
+        });
+      },
+      
+      // Set video wallpaper source
+      setVideoWallpaperSrc: (src) => {
+        set({ videoWallpaperSrc: src });
+      },
+      
+      // Set video wallpaper opacity
+      setVideoWallpaperOpacity: (opacity) => {
+        set({ videoWallpaperOpacity: opacity });
       },
       
       // Set theme
@@ -492,6 +532,9 @@ export const useOsStore = create<OsState>()(
         wallpaper: state.wallpaper,
         animatedWallpaper: state.animatedWallpaper,
         animatedWallpaperOpacity: state.animatedWallpaperOpacity,
+        videoWallpaper: state.videoWallpaper,
+        videoWallpaperSrc: state.videoWallpaperSrc,
+        videoWallpaperOpacity: state.videoWallpaperOpacity,
         username: state.username,
       }),
     }

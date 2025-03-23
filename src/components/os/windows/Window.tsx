@@ -25,6 +25,7 @@ interface WindowProps {
 export default function Window({
   id,
   title,
+  icon,
   position,
   size,
   isActive,
@@ -74,7 +75,7 @@ export default function Window({
   return (
     <motion.div
       ref={windowRef}
-      className={`os-window pointer-events-auto absolute ${isActive ? 'shadow-neon-blue' : ''}`}
+      className={`os-window pointer-events-auto absolute rounded-lg overflow-hidden backdrop-blur-sm bg-slate-800/80 border border-slate-700 ${isActive ? 'shadow-xl shadow-cyan-500/30' : 'shadow-lg'}`}
       style={{
         width: isMaximized ? '100%' : size.width,
         height: isMaximized ? 'calc(100% - 56px)' : size.height,
@@ -90,38 +91,43 @@ export default function Window({
     >
       {/* Title Bar */}
       <div 
-        className="window-titlebar os-window-title-bar select-none cursor-grab active:cursor-grabbing"
+        className="window-titlebar select-none cursor-grab active:cursor-grabbing flex justify-between items-center px-3 py-2 bg-gradient-to-r from-slate-900/90 to-slate-800/90 text-white"
       >
-        <div className="flex items-center">
-          <div className="font-cyber text-sm truncate">{title}</div>
+        <div className="flex items-center space-x-2">
+          {icon && (
+            <div className="w-4 h-4 flex items-center justify-center">
+              <img src={icon} alt={title} className="max-w-full max-h-full" />
+            </div>
+          )}
+          <div className="font-medium text-sm truncate">{title}</div>
         </div>
         
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1">
           <button 
-            className="p-1 text-cyber-blue/70 hover:text-cyber-blue hover:bg-cyber-blue/20 rounded"
+            className="p-1.5 rounded-full text-slate-400 hover:text-white hover:bg-slate-700/50 transition-colors"
             onClick={() => onMinimize(id)}
           >
-            <FaWindowMinimize size={12} />
+            <FaWindowMinimize size={10} />
           </button>
           
           <button 
-            className="p-1 text-cyber-blue/70 hover:text-cyber-blue hover:bg-cyber-blue/20 rounded"
+            className="p-1.5 rounded-full text-slate-400 hover:text-white hover:bg-slate-700/50 transition-colors"
             onClick={handleMaximizeToggle}
           >
-            {isMaximized ? <FaWindowRestore size={12} /> : <FaWindowMaximize size={12} />}
+            {isMaximized ? <FaWindowRestore size={10} /> : <FaWindowMaximize size={10} />}
           </button>
           
           <button 
-            className="p-1 text-cyber-red/70 hover:text-cyber-red hover:bg-cyber-red/20 rounded"
+            className="p-1.5 rounded-full text-slate-400 hover:text-white hover:bg-red-500/80 transition-colors"
             onClick={() => onClose(id)}
           >
-            <FaTimes size={14} />
+            <FaTimes size={12} />
           </button>
         </div>
       </div>
       
       {/* Window Content */}
-      <div className="p-4 h-[calc(100%-32px)] overflow-auto">
+      <div className="h-[calc(100%-40px)] overflow-auto bg-gradient-to-b from-slate-800/95 to-slate-900/95">
         {children}
       </div>
     </motion.div>

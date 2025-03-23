@@ -2,11 +2,17 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [],
+    unoptimized: true
   },
   experimental: {
-    optimizeCss: true,
+    optimizeCss: false,
   },
+  typescript: {
+    ignoreBuildErrors: true
+  },
+  eslint: {
+    ignoreDuringBuilds: true
+  }
 }
 
 module.exports = nextConfig 

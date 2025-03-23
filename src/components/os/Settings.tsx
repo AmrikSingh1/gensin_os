@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useOsStore } from '@/store/osStore'
-import { FaDesktop, FaVolumeUp, FaBell, FaPalette, FaUser, FaLock, FaWifi, FaLanguage } from 'react-icons/fa'
+import { FaDesktop, FaVolumeUp, FaBell, FaPalette, FaUser, FaLock, FaWifi, FaLanguage, FaVideo } from 'react-icons/fa'
 
 export default function Settings({ windowId }: { windowId: string }) {
   const { 
@@ -11,7 +11,12 @@ export default function Settings({ windowId }: { windowId: string }) {
     animatedWallpaper, 
     setAnimatedWallpaper, 
     animatedWallpaperOpacity, 
-    setAnimatedWallpaperOpacity, 
+    setAnimatedWallpaperOpacity,
+    videoWallpaper,
+    toggleVideoWallpaper,
+    videoWallpaperSrc,
+    videoWallpaperOpacity,
+    setVideoWallpaperOpacity,
     theme, 
     setTheme 
   } = useOsStore()
@@ -133,6 +138,75 @@ export default function Settings({ windowId }: { windowId: string }) {
               </div>
             </div>
             
+            {/* Video Wallpaper Settings */}
+            <div>
+              <div className="flex items-center justify-between">
+                <label className="block text-cyber-blue/80 font-mono text-sm">
+                  VIDEO WALLPAPER
+                </label>
+                <div className="relative inline-block w-12 h-6 mr-2">
+                  <input 
+                    type="checkbox" 
+                    checked={videoWallpaper} 
+                    onChange={(e) => toggleVideoWallpaper(e.target.checked)}
+                    className="sr-only"
+                  />
+                  <div 
+                    onClick={() => toggleVideoWallpaper(!videoWallpaper)}
+                    className={`block w-12 h-6 rounded-full cursor-pointer transition-colors ${
+                      videoWallpaper ? 'bg-cyber-blue' : 'bg-cyber-black'
+                    }`}
+                  >
+                    <div 
+                      className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${
+                        videoWallpaper ? 'transform translate-x-6' : ''
+                      }`}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+              
+              {videoWallpaper && (
+                <div className="mt-3">
+                  <div className="mb-4">
+                    <span className="block text-cyber-blue/80 font-mono text-xs mb-1">
+                      CURRENT VIDEO: {videoWallpaperSrc.split('/').pop()}
+                    </span>
+                    <div className="aspect-video rounded overflow-hidden border border-cyber-blue/30">
+                      <video 
+                        src={videoWallpaperSrc} 
+                        className="w-full h-full object-cover"
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                      />
+                    </div>
+                  </div>
+                  
+                  <label className="block text-cyber-blue/80 font-mono text-sm mb-2">
+                    VIDEO OPACITY: {Math.round(videoWallpaperOpacity * 100)}%
+                  </label>
+                  <input 
+                    type="range" 
+                    min="0.1" 
+                    max="1" 
+                    step="0.05"
+                    value={videoWallpaperOpacity}
+                    onChange={(e) => setVideoWallpaperOpacity(parseFloat(e.target.value))}
+                    className="w-full h-2 bg-cyber-black rounded-lg appearance-none cursor-pointer"
+                  />
+                  
+                  <div className="mt-3 text-xs text-cyber-blue/60">
+                    <div className="flex items-center">
+                      <FaVideo className="mr-1" />
+                      <span>Video wallpapers will disable animated wallpapers</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            
             {/* Animated Wallpaper Settings */}
             <div>
               <label className="block text-cyber-blue/80 font-mono text-sm mb-2">
@@ -142,6 +216,7 @@ export default function Settings({ windowId }: { windowId: string }) {
                 className="os-input w-full bg-cyber-black"
                 value={animatedWallpaper}
                 onChange={(e) => setAnimatedWallpaper(e.target.value as any)}
+                disabled={videoWallpaper}
               >
                 {animatedWallpaperOptions.map(option => (
                   <option key={option.value} value={option.value}>
@@ -149,10 +224,15 @@ export default function Settings({ windowId }: { windowId: string }) {
                   </option>
                 ))}
               </select>
+              {videoWallpaper && (
+                <div className="mt-1 text-amber-400/80 text-xs">
+                  Animated wallpapers are disabled while video wallpaper is active
+                </div>
+              )}
             </div>
             
             {/* Opacity slider for animated wallpaper */}
-            {animatedWallpaper !== 'none' && (
+            {animatedWallpaper !== 'none' && !videoWallpaper && (
               <div>
                 <label className="block text-cyber-blue/80 font-mono text-sm mb-2">
                   ANIMATION OPACITY: {Math.round(animatedWallpaperOpacity * 100)}%
@@ -180,7 +260,14 @@ export default function Settings({ windowId }: { windowId: string }) {
                   alt="Current wallpaper"
                   className="w-full h-full object-cover" 
                 />
-                {animatedWallpaper !== 'none' && (
+                {videoWallpaper && (
+                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                    <span className="text-cyber-blue animate-pulse">
+                      <FaVideo className="inline mr-2" /> Video Wallpaper Active
+                    </span>
+                  </div>
+                )}
+                {!videoWallpaper && animatedWallpaper !== 'none' && (
                   <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                     <span className="text-cyber-blue animate-pulse">
                       {animatedWallpaperOptions.find(o => o.value === animatedWallpaper)?.label} Animation Active
