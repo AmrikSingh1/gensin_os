@@ -16,6 +16,13 @@ export default function BootScreen() {
     'Calibrating holographic display...',
     'Activating cybernetic protocols...',
     'Synchronizing temporal matrices...',
+    'Verifying biometric signatures...',
+    'Initializing quantum encryption...',
+    'Connecting to the grid network...',
+    'Loading AI assistant modules...',
+    'Scanning for security threats...',
+    'Optimizing memory subsystems...',
+    'Preparing neural-link interface...',
     'Launching GensinOS v2.0...'
   ]
   
