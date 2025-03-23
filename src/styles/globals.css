@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 13, 13, 13;
+  --background-end-rgb: 0, 0, 0;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+    to bottom,
+    rgb(var(--background-start-rgb)),
+    rgb(var(--background-end-rgb))
+  );
+  font-family: 'Inter', sans-serif;
+}
+
+@layer components {
+  .os-window {
+    @apply bg-cyber-gray/80 backdrop-blur-md border border-cyber-blue/30 rounded-md overflow-hidden shadow-neon-blue;
+  }
+  
+  .os-window-title-bar {
+    @apply bg-cyber-blue/20 px-2 py-1 flex items-center justify-between;
+  }
+  
+  .os-button {
+    @apply px-4 py-2 bg-cyber-blue/20 hover:bg-cyber-blue/40 border border-cyber-blue/50 
+           text-white rounded transition-all duration-300 font-cyber;
+  }
+  
+  .os-button-primary {
+    @apply px-4 py-2 bg-cyber-blue hover:bg-cyber-blue/80 border border-cyber-blue 
+           text-cyber-black font-semibold rounded transition-all duration-300 shadow-neon-blue font-cyber;
+  }
+  
+  .os-input {
+    @apply bg-cyber-black/50 border border-cyber-blue/30 text-white rounded p-2 
+           focus:outline-none focus:border-cyber-blue focus:shadow-neon-blue transition-all duration-300;
+  }
+  
+  .taskbar-item {
+    @apply flex items-center justify-center h-12 w-12 hover:bg-cyber-blue/20 transition-all duration-300 rounded-md;
+  }
+  
+  .desktop-icon {
+    @apply flex flex-col items-center justify-center p-2 hover:bg-cyber-blue/20 transition-all duration-300 rounded-md;
+  }
+  
+  .glitch-effect {
+    position: relative;
+    animation: glitch 1s linear infinite;
+  }
+  
+  .neon-border {
+    @apply border border-cyber-blue/50 shadow-neon-blue;
+  }
+  
+  .cyber-grid {
+    background-size: 50px 50px;
+    background-image: 
+      linear-gradient(to right, rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+  }
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+.scanlines {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.03) 3px,
+    rgba(0, 0, 0, 0) 3px
+  );
+  z-index: 9999;
+} 

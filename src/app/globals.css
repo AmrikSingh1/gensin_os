@@ -1,0 +1,344 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Google Fonts - Rajdhani for cyberpunk feel */
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap');
+
+:root {
+  --cyber-black: #0a0a0f;
+  --cyber-dark: #12141f;
+  --cyber-blue: #0ff4f4;
+  --cyber-pink: #ff2a6d;
+  --cyber-purple: #7d56f4;
+  --cyber-yellow: #f9f871;
+  --cyber-red: #ff3366;
+  --font-cyber: 'Rajdhani', sans-serif;
+  --font-mono: 'Share Tech Mono', monospace;
+}
+
+/* Base styles */
+body {
+  background-color: var(--cyber-black);
+  color: #ffffff;
+  font-family: var(--font-cyber);
+  overflow: hidden;
+}
+
+/* Animations */
+@keyframes pulse-glow {
+  0% { 
+    opacity: 0.6;
+    box-shadow: 0 0 5px 0px var(--cyber-blue); 
+  }
+  50% { 
+    opacity: 1;
+    box-shadow: 0 0 20px 2px var(--cyber-blue); 
+  }
+  100% { 
+    opacity: 0.6;
+    box-shadow: 0 0 5px 0px var(--cyber-blue); 
+  }
+}
+
+@keyframes scan-line {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+/* Grid Background */
+.cyber-grid {
+  background-size: 50px 50px;
+  background-image: 
+    linear-gradient(to right, rgba(15, 244, 244, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 244, 244, 0.05) 1px, transparent 1px);
+  animation: pulse-grid 8s infinite ease-in-out;
+}
+
+@keyframes pulse-grid {
+  0%, 100% {
+    background-size: 50px 50px;
+  }
+  50% {
+    background-size: 52px 52px;
+  }
+}
+
+/* Scanlines effect */
+.scanlines {
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(10, 10, 15, 0.02) 50%
+  );
+  background-size: 100% 4px;
+}
+
+.scanlines::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: linear-gradient(to bottom, 
+    rgba(15, 244, 244, 0), 
+    rgba(15, 244, 244, 0.1) 40%, 
+    rgba(15, 244, 244, 0.1) 60%, 
+    rgba(15, 244, 244, 0));
+  background-size: 100% 2px;
+}
+
+/* Common UI elements */
+.os-window {
+  @apply bg-cyber-dark/90 backdrop-blur-md border border-cyber-blue/30 rounded-md shadow-lg overflow-hidden;
+  box-shadow: 0 0 15px rgba(15, 244, 244, 0.15), 0 0 3px rgba(15, 244, 244, 0.3);
+}
+
+.os-window-title-bar {
+  @apply bg-cyber-blue/10 backdrop-blur-md px-3 py-2 flex items-center justify-between border-b border-cyber-blue/30;
+}
+
+.os-input {
+  @apply bg-cyber-black/60 border border-cyber-blue/30 rounded-md px-3 py-2 text-white outline-none focus:border-cyber-blue;
+}
+
+.os-button {
+  @apply bg-cyber-blue/10 hover:bg-cyber-blue/20 text-cyber-blue border border-cyber-blue/30 px-4 py-2 rounded-md transition-colors;
+}
+
+.os-button-primary {
+  @apply bg-cyber-blue/30 hover:bg-cyber-blue/40 text-white border border-cyber-blue/60 px-4 py-2 rounded-md transition-colors;
+}
+
+.os-button-danger {
+  @apply bg-cyber-red/20 hover:bg-cyber-red/30 text-cyber-red border border-cyber-red/30 px-4 py-2 rounded-md transition-colors;
+}
+
+/* Taskbar and Start Menu */
+.taskbar-item {
+  @apply flex items-center justify-center w-12 h-12 bg-cyber-blue/10 hover:bg-cyber-blue/20 border-b-2 border-transparent hover:border-cyber-blue transition-colors text-cyber-blue/80 hover:text-cyber-blue;
+}
+
+.taskbar-item.active {
+  @apply bg-cyber-blue/20 border-cyber-blue text-cyber-blue;
+}
+
+/* Calculator styles */
+.calc-button {
+  @apply flex items-center justify-center rounded-lg border font-bold transition-all active:scale-95 shadow-inner;
+  min-height: 3rem;
+  text-shadow: 0 0 2px currentColor;
+}
+
+.calc-button-num {
+  @apply bg-cyber-dark/80 text-cyber-blue border-cyber-blue/30 hover:bg-cyber-blue/10;
+}
+
+.calc-button-op {
+  @apply bg-cyber-blue/10 text-cyber-blue border-cyber-blue/30 hover:bg-cyber-blue/20;
+}
+
+.calc-button-fn {
+  @apply bg-cyber-pink/10 text-cyber-pink border-cyber-pink/30 hover:bg-cyber-pink/20;
+}
+
+.calc-button-eq {
+  @apply bg-cyber-pink/20 text-white border-cyber-pink/50 hover:bg-cyber-pink/30;
+}
+
+/* Glowing text */
+.text-glow {
+  text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+}
+
+.text-glow-sm {
+  text-shadow: 0 0 4px currentColor, 0 0 8px currentColor;
+}
+
+/* Shadow variants */
+.shadow-neon-blue {
+  box-shadow: 0 0 15px rgba(15, 244, 244, 0.15), 0 0 3px rgba(15, 244, 244, 0.3);
+}
+
+.shadow-neon-pink {
+  box-shadow: 0 0 15px rgba(255, 42, 109, 0.15), 0 0 3px rgba(255, 42, 109, 0.3);
+}
+
+/* Font utilities */
+.font-cyber {
+  font-family: var(--font-cyber);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(15, 244, 244, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 244, 244, 0.5);
+}
+
+/* Extend tailwind colors */
+.bg-cyber-black {
+  background-color: var(--cyber-black);
+}
+
+.bg-cyber-dark {
+  background-color: var(--cyber-dark);
+}
+
+.bg-cyber-blue {
+  background-color: var(--cyber-blue);
+}
+
+.bg-cyber-pink {
+  background-color: var(--cyber-pink);
+}
+
+.bg-cyber-purple {
+  background-color: var(--cyber-purple);
+}
+
+.bg-cyber-yellow {
+  background-color: var(--cyber-yellow);
+}
+
+.bg-cyber-red {
+  background-color: var(--cyber-red);
+}
+
+.text-cyber-black {
+  color: var(--cyber-black);
+}
+
+.text-cyber-dark {
+  color: var(--cyber-dark);
+}
+
+.text-cyber-blue {
+  color: var(--cyber-blue);
+}
+
+.text-cyber-pink {
+  color: var(--cyber-pink);
+}
+
+.text-cyber-purple {
+  color: var(--cyber-purple);
+}
+
+.text-cyber-yellow {
+  color: var(--cyber-yellow);
+}
+
+.text-cyber-red {
+  color: var(--cyber-red);
+}
+
+.border-cyber-blue {
+  border-color: var(--cyber-blue);
+}
+
+.border-cyber-pink {
+  border-color: var(--cyber-pink);
+}
+
+.border-cyber-purple {
+  border-color: var(--cyber-purple);
+}
+
+.border-cyber-red {
+  border-color: var(--cyber-red);
+}
+
+/* Glass effect */
+.glass-effect {
+  backdrop-filter: blur(12px);
+  background: rgba(10, 10, 15, 0.6);
+  border: 1px solid rgba(15, 244, 244, 0.2);
+}
+
+/* Terminal styles */
+.terminal-text {
+  font-family: var(--font-mono);
+  color: var(--cyber-blue);
+}
+
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  from, to {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Loading indicator */
+.loading-dots::after {
+  content: '.';
+  animation: dots 1.5s steps(5, end) infinite;
+}
+
+@keyframes dots {
+  0%, 20% { content: '.'; }
+  40% { content: '..'; }
+  60% { content: '...'; }
+  80%, 100% { content: ''; }
+}
+
+/* Utility classes */
+.backdrop-blur-xl {
+  backdrop-filter: blur(24px);
+}
+
+.blur-3xl {
+  filter: blur(64px);
+} 
