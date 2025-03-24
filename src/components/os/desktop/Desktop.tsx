@@ -124,8 +124,14 @@ const Desktop: React.FC = () => {
             playsInline
             className="absolute top-0 left-0 w-full h-full object-cover"
             style={{ opacity: videoWallpaperOpacity }}
+            onLoadedData={() => console.log('Video loaded successfully')}
+            onError={(e) => console.error('Video loading error:', e)}
+            onPlay={() => console.log('Video started playing')}
+            onPause={() => console.log('Video paused')}
+            onEnded={() => console.log('Video ended')}
           >
             <source src={videoWallpaperSrc} type="video/mp4" />
+            Your browser does not support the video tag.
           </video>
         </div>
       )}

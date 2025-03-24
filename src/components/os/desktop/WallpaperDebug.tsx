@@ -112,7 +112,10 @@ export default function WallpaperDebug() {
           
           <button 
             className={`${videoWallpaper ? 'bg-red-800 hover:bg-red-700' : 'bg-green-800 hover:bg-green-700'} text-white px-3 py-1 rounded w-full mt-2`}
-            onClick={() => toggleVideoWallpaper(!videoWallpaper)}
+            onClick={() => {
+              console.log('Toggling video wallpaper:', !videoWallpaper);
+              toggleVideoWallpaper(!videoWallpaper);
+            }}
           >
             {videoWallpaper ? 'Disable Video' : 'Enable Video'}
           </button>
@@ -133,6 +136,19 @@ export default function WallpaperDebug() {
           >
             Force Video Reload
           </button>
+
+          <div className="mt-2 text-xs text-cyan-400">
+            Debug Info:
+            <pre className="mt-1 text-xs overflow-auto">
+              {JSON.stringify({
+                videoWallpaper,
+                videoWallpaperSrc,
+                videoWallpaperOpacity,
+                animatedWallpaper,
+                animatedWallpaperOpacity
+              }, null, 2)}
+            </pre>
+          </div>
         </div>
       </div>
       
